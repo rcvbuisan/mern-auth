@@ -1,4 +1,5 @@
 import callApi from '../../util/apiCaller';
+import auth from '../../util/auth';
 
 // Export Constants
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
@@ -80,8 +81,9 @@ export function loginUser(creds) {
           return Promise.reject(user)
         } else {
           // If login was successful, set the token in local storage
-          localStorage.setItem('id_token', user.id_token)
-          localStorage.setItem('access_token', user.access_token)
+          auth.setToken(res.token);
+          // auth.setToken(response.jwt, body.rememberMe);
+          // auth.setUserInfo(response.user, body.rememberMe);
           // Dispatch the success action
           dispatch(receiveLogin(user))
         }
@@ -93,8 +95,7 @@ export function loginUser(creds) {
 export function logoutUser() {
   return dispatch => {
     dispatch(requestLogout())
-    localStorage.removeItem('id_token')
-    localStorage.removeItem('access_token')
+    auth.clearToken();
     dispatch(receiveLogout())
   }
 }

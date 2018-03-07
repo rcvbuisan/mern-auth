@@ -25,8 +25,10 @@ export function getPosts(req, res) {
  * @returns void
  */
 export function addPost(req, res) {
-  if (!req.body.post.name || !req.body.post.title || !req.body.post.content) {
-    res.status(403).end();
+  if (!req.payload._id || !req.body.post.name || !req.body.post.title || !req.body.post.content) {
+    res.status(403).json({
+      "message" : "UnauthorizedError: private profile"
+    }).end();
   }
 
   const newPost = new Post(req.body.post);

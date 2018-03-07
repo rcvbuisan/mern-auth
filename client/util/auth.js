@@ -50,11 +50,11 @@ const auth = {
    * @return {String|Object}     Data from the storage
    */
   get(key) {
-    if (localStorage && localStorage.getItem(key)) {
+    if (typeof localStorage !== "undefined" && localStorage.getItem(key)) {
       return parse(localStorage.getItem(key)) || null;
     }
 
-    if (sessionStorage && sessionStorage.getItem(key)) {
+    if (typeof sessionStorage !== "undefined" && sessionStorage.getItem(key)) {
       return parse(sessionStorage.getItem(key)) || null;
     }
 

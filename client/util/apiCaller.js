@@ -1,13 +1,28 @@
 import fetch from 'isomorphic-fetch';
 import Config from '../../server/config';
+import auth from './auth';
 
 export const API_URL = (typeof window === 'undefined' || process.env.NODE_ENV === 'test') ?
   process.env.BASE_URL || (`http://localhost:${process.env.PORT || Config.port}/api`) :
   '/api';
 
 export default function callApi(endpoint, method = 'get', body) {
+
+  // Set headers
+  const headers = {
+    'Content-Type': 'application/json'
+  };
+
+  // componentDidMount
+  if (method.toLowerCase() === 'auth') {
+    const token = auth.getToken();
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+  }
+
   return fetch(`${API_URL}/${endpoint}`, {
-    headers: { 'content-type': 'application/json' },
+    headers: headers,
     method,
     body: JSON.stringify(body),
   })
